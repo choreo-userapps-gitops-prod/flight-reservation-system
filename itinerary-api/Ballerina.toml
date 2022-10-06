@@ -1,5 +1,7 @@
 [package]
 distribution = "2201.0.3"
-
+name= "itineraryapi"
+org= "ramith"
+export= ["itineraryapi"]
 [build-options]
 observabilityIncluded = true
