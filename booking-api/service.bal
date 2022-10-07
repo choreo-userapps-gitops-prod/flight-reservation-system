@@ -1,7 +1,7 @@
 import ballerina/log;
 import ballerina/http;
 import ballerina/time;
-import ramithjayasingheznszn/inventoryapi;
+import ramith/inventoryapi;
 
 configurable ApiCredentials inventoryApi = ?;
 
@@ -16,7 +16,7 @@ service / on new http:Listener(9090) {
         log:printInfo(string `adjusting flight inventory: flight number = ${payload.flightNumber}, flight date = ${payload.flightDate}, seats = ${payload.seats}`);
 
         inventoryapi:Client inventoryapiEndpoint = check new ({auth: {clientId: inventoryApi.clientId, clientSecret: inventoryApi.clientSecret}});
-        inventoryapi:SeatAllocation postInventoryAllocateResponse = check inventoryapiEndpoint->postInventoryAllocate({flightNumber: payload.flightNumber, flightDate: payload.flightDate, seats: payload.seats});
+        inventoryapi:SeatAllocation _ = check inventoryapiEndpoint->postInventoryAllocate({flightNumber: payload.flightNumber, flightDate: payload.flightDate, seats: payload.seats});
         payload.status = BOOKING_CONFIRMED;
         payload.bookingDate = currentDate();
         BookingRecord saved = saveBookingRecord(payload);
@@ -41,7 +41,7 @@ type ApiCredentials record {|
     string clientSecret;
 |};
 
-enum BookingStatus {
+public enum BookingStatus {
     NEW,
     BOOKING_CONFIRMED,
     CHECKED_IN
@@ -53,7 +53,7 @@ type Fare record {
     decimal fare;
 };
 
-type BookingRecord record {
+public type BookingRecord record {
     readonly int id;
     string flightNumber;
     string origin;
